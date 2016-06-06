@@ -51,21 +51,33 @@ class MyConnection : public boost::enable_shared_from_this<MyConnection>
 		
 		void asyncRead()
 		{
-			boost::asio::async_read_until(socket, 
-											stream_buffer,
-											'\0',
-											boost::bind(
-												&MyConnection::readHandler,
-												shared_from_this(),
-												boost::asio::placeholders::error,
-												boost::asio::placeholders::bytes_transferred
-												)
-											);
+			boost::asio::async_read_until(
+						socket, 
+						stream_buffer,
+						'\0',
+						boost::bind(
+							&MyConnection::readHandler,
+							shared_from_this(),
+							boost::asio::placeholders::error,
+							boost::asio::placeholders::bytes_transferred
+						)
+			);
 		}
 		
-		void asyncWrite()
+		void asyncWrite(const std::string& s)
 		{
+			message = s;
 			
+			boost::asio::async_write(
+						socket,
+						boost::asio::buffer(message.c_str(), message.size() + 1),
+						boost::bind(
+							&MyConnection::writeHandler,
+							shared_from_this(),
+							boost::asio::placeholders::error,
+							boost::asio::placeholders::bytes_transferred
+						)
+			);
 		}
 		
 		void readHandler(const boost::system::error_code& ec, size_t bytes_transferred)
@@ -73,7 +85,7 @@ class MyConnection : public boost::enable_shared_from_this<MyConnection>
 			
 		}
 		
-		void writeHandler()
+		void writeHandler(const boost::system::error_code& ec, size_t bytes_transferred)
 		{
 			
 		}
