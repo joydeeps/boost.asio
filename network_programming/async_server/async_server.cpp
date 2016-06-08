@@ -191,9 +191,9 @@ int main()
 		MyServer s;
 		s.start();
 
-		std::cerr << "Shutdown in 2 seconds.............\n";
+		std::cerr << "Shutdown in 20 seconds.............\n";
 	
-		boost::this_thread::sleep_for(boost::chrono::seconds(2));
+		boost::this_thread::sleep_for(boost::chrono::seconds(20));
 	
 		std::cerr << "Shutdown............\n";
 	
