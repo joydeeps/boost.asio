@@ -45,9 +45,9 @@ class MyConnection : public boost::enable_shared_from_this<MyConnection>
 		
 	protected: 
 		// memeber variables
-		socket_type					socket;
+		socket_type								socket;
 		boost::asio::streambuf		stream_buffer;
-		std::string					message;
+		std::string								message;
 		
 		void asyncRead()
 		{
@@ -185,6 +185,25 @@ class MyServer
 									
 int main()
 {
+	try
+	{
+		
+		MyServer s;
+		s.start();
+
+		std::cerr << "Shutdown in 2 seconds.............\n";
+	
+		boost::this_thread::sleep_for(boost::chrono::seconds(2));
+	
+		std::cerr << "Shutdown............\n";
+	
+		s.stopAllConnections();		// interrupt ongoing connections!!!
+	} 					// destructor of the server will join the service thread
+	catch (std::exception& e)
+	{
+		std::cerr << "Exception: " << e.what() << std::endl;
+		return 1;
+	}
 	
 	return 0;
 }
